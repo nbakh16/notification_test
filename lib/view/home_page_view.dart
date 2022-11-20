@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:notif_test/services/my_notification.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,7 +32,8 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 12,),
             ElevatedButton(
               onPressed: () {
-                myNotification.sendNotification("Notif title", "The body");
+                myNotification.sendNotification("Notif title", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                    "\n1\n2\n3\n4\n5\n6");
               },
               style: ElevatedButton.styleFrom(
                   elevation: 4,
