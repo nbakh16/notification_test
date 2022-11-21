@@ -1,8 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
 
-class MyNotification{
+class NotificationService{
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   final AndroidInitializationSettings _androidInitializationSettings = AndroidInitializationSettings("logo");
@@ -122,18 +121,18 @@ class MyNotification{
 
   Future<void> ongoingNotification(String title, String body) async {
     const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-    "ID", "Name",
-    importance: Importance.max,
-    priority: Priority.high,
-    ongoing: true,
-    autoCancel: false
+      "ID", "Name",
+      importance: Importance.max,
+      priority: Priority.high,
+      ongoing: true,
+      autoCancel: false,
     );
     const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
     await _flutterLocalNotificationsPlugin.show(
-        0,
-        title,
-        body,
-        notificationDetails,
+      0,
+      title,
+      body,
+      notificationDetails,
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notif_test/services/my_notification.dart';
+import 'package:notif_test/services/notification_service.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  MyNotification myNotification = MyNotification();
+  NotificationService myNotification = NotificationService();
   int schTime=0;
 
   @override
@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("Home Page"),
+            Text("—Test Notification—"),
             SizedBox(height: 12,),
             ElevatedButton(
               onPressed: () {
@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                     content: TextFormField(
                       style: const TextStyle(fontSize: 18),
                       decoration: const InputDecoration(
-                          hintText: 'time',
+                          hintText: 'Time in second',
                           prefixIcon: Icon(Icons.alarm_sharp, color: Colors.grey,size: 30,)
                       ),
                       onChanged: (value) {
@@ -82,7 +82,8 @@ class _HomePageState extends State<HomePage> {
                     textConfirm: "Set",
                     confirmTextColor: Colors.white,
                     onConfirm: (){
-                      myNotification.scheduleNotification("Notif title", "The body of scheduled", schTime);
+                      myNotification.scheduleNotification("Notif title",
+                          "Showing notification after $schTime seconds", schTime);
                       Get.back();
                     }
                 );
