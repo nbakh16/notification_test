@@ -1,4 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class MyNotification{
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -14,14 +16,6 @@ class MyNotification{
   }
 
   void sendNotification(String title, String body) async {
-    const BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
-      "static body.",
-      htmlFormatBigText: true,
-      contentTitle: "Flutter Big Text Notification Title",
-      htmlFormatContentTitle: true,
-      summaryText: "Flutter Big Text Notification Summary Text",
-      htmlFormatSummaryText: true,
-    );
     AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
       "Id",
       "Name",
@@ -34,7 +28,6 @@ class MyNotification{
         htmlFormatContentTitle: true,
         htmlFormatSummaryText: true,
       )
-
     );
 
     NotificationDetails notificationDetails = NotificationDetails(
@@ -45,45 +38,102 @@ class MyNotification{
         0,
         title,
         body,
-        notificationDetails
+        notificationDetails,
     );
   }
 
-  void scheduleNotification(String title, String body) async {
+  void imageNotification(String title, String body, String image) async {
     AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
         "Id",
         "Name",
         importance: Importance.max,
         priority: Priority.high,
+        subText: "sub_text",
+        styleInformation: BigPictureStyleInformation(
+          DrawableResourceAndroidBitmap(image),
+          largeIcon: DrawableResourceAndroidBitmap(image),
+          htmlFormatContentTitle: true,
+          htmlFormatSummaryText: true,
+        )
     );
 
     NotificationDetails notificationDetails = NotificationDetails(
         android: androidNotificationDetails
     );
 
-    await _flutterLocalNotificationsPlugin.periodicallyShow(
-        0,
+    await _flutterLocalNotificationsPlugin.show(
+      0,
+      title,
+      body,
+      notificationDetails,
+    );
+  }
+
+  Future<void> scheduleNotification(String title, String body, int time) async {
+    var scheduledNotificationDateTime = DateTime.now().add(Duration(seconds: time));
+    AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+      "Id",
+      "Name",
+      importance: Importance.max,
+      priority: Priority.high,
+      icon: "logo",
+      largeIcon: DrawableResourceAndroidBitmap("logo"),
+      enableLights: true,
+      enableVibration: true,
+    );
+
+    NotificationDetails notificationDetails = NotificationDetails(
+        android: androidNotificationDetails
+    );
+
+    await _flutterLocalNotificationsPlugin.schedule(
+        1,
         title,
         body,
-        RepeatInterval.everyMinute,
+        scheduledNotificationDateTime,
         notificationDetails
     );
   }
 
-  // Future<void> showBigTextNotification(String title, String body) async {
-  //   const BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
-  //   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-  //   htmlFormatBigText: true,
-  //   contentTitle: "Flutter Big Text Notification Title",
-  //   htmlFormatContentTitle: true,
-  //   summaryText: "Flutter Big Text Notification Summary Text",
-  //   htmlFormatSummaryText: true,
-  //   );
-  //   const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-  //   ‘channel_id’, ‘Channel Name’, ‘Channel Description’, styleInformation: bigTextStyleInformation);
-  //   const NotificationDetails notificationDetails = NotificationDetails(androidNotificationDetails, null);
-  //   await _flutterLocalNotificationsPlugin.show(
-  //       0, title, body, notificationDetails,
-  //       payload: "Destination Screen(Big Text Notification)");
-  // }
+  //using zonedSchedule
+  Future<void> showScheduleNotification(String title, String body, int time) async {
+    var scheduledNotificationDateTime = tz.TZDateTime.now(tz.local).add(Duration(seconds: 5));
+    var androidDetails = AndroidNotificationDetails(
+    "ID",
+    "Name",
+    icon: "logo",
+    largeIcon: DrawableResourceAndroidBitmap("logo"),
+    );
+
+    NotificationDetails notificationDetails = NotificationDetails(
+        android: androidDetails
+    );
+
+    await _flutterLocalNotificationsPlugin.zonedSchedule(
+      0,
+      title,
+      body,
+      scheduledNotificationDateTime,
+      notificationDetails,
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      androidAllowWhileIdle: true,
+    );
+  }
+
+  Future<void> ongoingNotification(String title, String body) async {
+    const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+    "ID", "Name",
+    importance: Importance.max,
+    priority: Priority.high,
+    ongoing: true,
+    autoCancel: false
+    );
+    const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
+    await _flutterLocalNotificationsPlugin.show(
+        0,
+        title,
+        body,
+        notificationDetails,
+    );
+  }
 }
