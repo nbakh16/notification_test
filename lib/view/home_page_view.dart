@@ -1,6 +1,9 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:notif_test/services/notification_service.dart';
 import 'package:get/get.dart';
+
+import '../controllers/notification_controller.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -34,9 +37,10 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 12,),
             ElevatedButton(
               onPressed: () {
-                myNotification.sendNotification("Notif title", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
-                    "\n1\n2\n3\n4\n5\n6");
-                // myNotification.showOngoingNotification();
+                // myNotification.sendNotification("Notif title", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                //     "\n1\n2\n3\n4\n5\n6");
+
+                Get.find<NotificationController>().sendBasicNotification();
               },
               style: ElevatedButton.styleFrom(
                   elevation: 4,
@@ -48,10 +52,13 @@ class _HomePageState extends State<HomePage> {
               ),
               child: const Text("Simple Notif"),
             ),
+
             SizedBox(height: 12,),
             ElevatedButton(
               onPressed: () {
-                myNotification.imageNotification("Image title", "body text", "logo");
+                // myNotification.imageNotification("Image title", "body text", "logo");
+
+                Get.find<NotificationController>().sendImageNotification();
               },
               style: ElevatedButton.styleFrom(
                   elevation: 4,
@@ -63,6 +70,7 @@ class _HomePageState extends State<HomePage> {
               ),
               child: const Text("Image Notif"),
             ),
+
             SizedBox(height: 12,),
             ElevatedButton(
               onPressed: () {
@@ -82,12 +90,15 @@ class _HomePageState extends State<HomePage> {
                     textConfirm: "Set",
                     confirmTextColor: Colors.white,
                     onConfirm: (){
-                      myNotification.scheduleNotification("Notif title",
-                          "Showing notification after $schTime seconds", schTime);
+                      // myNotification.scheduleNotification("Notif title",
+                      //     "Showing notification after $schTime seconds", schTime);
+                      Get.find<NotificationController>().sendScheduledNotification(
+                        "Showing notification after $schTime seconds ${Emojis.time_alarm_clock}",
+                        schTime
+                      );
                       Get.back();
                     }
                 );
-                // myNotification.scheduleNotification("Notif title", "The body of scheduled", 6);
               },
               style: ElevatedButton.styleFrom(
                   elevation: 4,
@@ -99,6 +110,7 @@ class _HomePageState extends State<HomePage> {
               ),
               child: const Text("Schedule Notif"),
             ),
+
             SizedBox(height: 12,),
             ElevatedButton(
               onPressed: () {
@@ -113,6 +125,22 @@ class _HomePageState extends State<HomePage> {
                   foregroundColor: Colors.white
               ),
               child: const Text("Can't remove"),
+            ),
+
+            SizedBox(height: 12,),
+            ElevatedButton(
+              onPressed: () {
+                Get.find<NotificationController>().clearAllNotifications();
+              },
+              style: ElevatedButton.styleFrom(
+                  elevation: 4,
+                  minimumSize: const Size(200, 50),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+                  backgroundColor: Colors.brown,
+                  foregroundColor: Colors.white
+              ),
+              child: const Text("Clear all"),
             ),
           ],
         ),
